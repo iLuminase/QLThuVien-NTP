@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 namespace _2080601241_NguyenTienPhat_CloneQLThuVien
 {
     public partial class frmNhanVien : Form
@@ -56,6 +57,7 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
             lsvNhanVien.Columns.Add("Địa chỉ:", 280, HorizontalAlignment.Left);
             lsvNhanVien.Columns.Add("Điện thoại:", 110, HorizontalAlignment.Center);
             lsvNhanVien.Columns.Add("Bằng cấp:", 110, HorizontalAlignment.Center);
+
             HienthiNhanvien();
             HienthiBangCap();
             setButton(true);
@@ -104,10 +106,7 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
                 lvi.SubItems.Add(dt.Rows[i][5].ToString());
             }
         }
-        private void frmNhanVien_Load(object sender, EventArgs e)
-        {
-            HienthiNhanvien();
-        }
+
 
         private void lsvNhanVien_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -168,8 +167,7 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
         }
         private void btnLuu_Click(object sender, EventArgs e)
         {
-            string ngay = String.Format("{0:MM/dd/yyyy}",
-           dtpNgaySinh.Value);
+            string ngay = String.Format("{0:MM/dd/yyyy}", dtpNgaySinh.Value);
             //Định dạng ngày tương ứng với trong CSDL SQLserver
             if (themmoi)
             {
@@ -185,6 +183,7 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
                cbxBangCap.SelectedValue.ToString());
                 MessageBox.Show("Cập nhật thành công");
             }
+            lsvNhanVien.Items.Clear();
             HienthiNhanvien();
             setNull();
         }
