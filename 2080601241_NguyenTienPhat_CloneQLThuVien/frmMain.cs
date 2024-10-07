@@ -12,6 +12,8 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
 {
     public partial class frmMain : Form
     {
+        public string srvName = "_HEHENIKEN"; //chỉ định tên server
+        public string dbName = "QLTHUVIEN"; //chỉ định tên CSDL
         public frmMain()
         {
             InitializeComponent();

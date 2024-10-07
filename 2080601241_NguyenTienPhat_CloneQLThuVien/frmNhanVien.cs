@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Reflection;
 namespace _2080601241_NguyenTienPhat_CloneQLThuVien
 {
     public partial class frmNhanVien : Form
     {
-
         NhanVien nv = new NhanVien();
         public bool themmoi = false;
         SqlConnection sqlConn; //khai báo biến connection
@@ -26,6 +26,8 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
             string connStr = "Data source=" + srvName + ";database=" + dbName + ";Integrated Security = True";
             sqlConn = new SqlConnection(connStr);
         }
+
+       
         DataTable layDanhSachNhanVien() //lấy danh sách nhân viên
         {
             string sql = "Select * from NhanVien";
@@ -66,6 +68,7 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
         private void frmNhanvien_Load(object sender, EventArgs e)
         {
             HienthiNhanvien();
+
         }
         private void HienthiBangCap()
         {
@@ -115,16 +118,20 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
                 txtHoTen.Text = lsvNhanVien.SelectedItems[0].SubItems[1].Text;
                 //Chuyen sang kieu dateTime
                 dtpNgaySinh.Value = DateTime.Parse(lsvNhanVien.SelectedItems[0].SubItems[2].Text);
-                txtDiaChi.Text = lsvNhanVien.SelectedItems[0].SubItems[3].Text;
-                txtDienThoai.Text = lsvNhanVien.SelectedItems[0].SubItems[4].Text;
+                txtDiaChi.Text =
+                lsvNhanVien.SelectedItems[0].SubItems[3].Text;
+                txtDienThoai.Text =
+                lsvNhanVien.SelectedItems[0].SubItems[4].Text;
                 //Tìm vị trí của Tên bằng cấp trong Combobox
-                cbxBangCap.SelectedIndex = cbxBangCap.FindString(lsvNhanVien.SelectedItems[0].SubItems[5].Text);
+                cbxBangCap.SelectedIndex =
+                cbxBangCap.FindString(lsvNhanVien.SelectedItems[0].SubItems[5].Text);
             }
         }
 
         //Còn tiếp cho các sự kiện khác
         private void btnThem_Click(object sender, EventArgs e)
         {
+            setNull();
             themmoi = true;
             setButton(false);
             txtHoTen.Focus();
@@ -167,6 +174,7 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
         }
         private void btnLuu_Click(object sender, EventArgs e)
         {
+
             string ngay = String.Format("{0:MM/dd/yyyy}", dtpNgaySinh.Value);
             //Định dạng ngày tương ứng với trong CSDL SQLserver
             if (themmoi)
@@ -177,15 +185,39 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
             }
             else
             {
-                nv.CapNhatNhanVien(
-               lsvNhanVien.SelectedItems[0].SubItems[0].Text,
-               txtHoTen.Text, ngay, txtDiaChi.Text, txtDienThoai.Text,
-               cbxBangCap.SelectedValue.ToString());
+                nv.CapNhatNhanVien(lsvNhanVien.SelectedItems[0].SubItems[0].Text,
+                    txtHoTen.Text, ngay, txtDiaChi.Text, txtDienThoai.Text,
+                    cbxBangCap.SelectedValue.ToString());
                 MessageBox.Show("Cập nhật thành công");
             }
+
             lsvNhanVien.Items.Clear();
             HienthiNhanvien();
             setNull();
         }
+
+        private void txtTimKiem_TextChanged(object sender, EventArgs e)
+        {
+            string keyword = txtTim.Text.Trim();
+
+            // Gọi phương thức tìm kiếm trong NhanVien
+            DataTable dtTimKiem = nv.TimKiemNhanVien(keyword);
+
+            // Xóa các mục hiện tại trong ListView trước khi hiển thị kết quả mới
+            lsvNhanVien.Items.Clear();
+
+            // Hiển thị kết quả tìm kiếm trong ListView
+            foreach (DataRow row in dtTimKiem.Rows)
+            {
+                ListViewItem lvi = lsvNhanVien.Items.Add(row["MaNhanVien"].ToString());
+                lvi.SubItems.Add(row["HoTenNhanVien"].ToString());
+                lvi.SubItems.Add(row["NgaySinh"].ToString());
+                lvi.SubItems.Add(row["DiaChi"].ToString());
+                lvi.SubItems.Add(row["DienThoai"].ToString());
+                lvi.SubItems.Add(row["TenBangCap"].ToString());
+            }
+        }
+
+
     }
 }

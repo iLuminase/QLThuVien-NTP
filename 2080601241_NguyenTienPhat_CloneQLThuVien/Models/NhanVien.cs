@@ -19,7 +19,7 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
         public DataTable LayDSNhanvien()
         {
             
-            string strSQL = "Select MaNhanVien, HoTenNhanVien, NgaySinh,DiaChi, Dienthoai," +
+            string strSQL = "Select MaNhanVien, HoTenNhanVien, NgaySinh,DiaChi, DienThoai," +
                 " TenBangCap From NhanVien N, BANGCAP B Where N.MaBangCap = B.MaBangCap";
             DataTable dt = db.Execute(strSQL);
             //Goi phuong thuc truy xuat du lieu 
@@ -59,6 +59,14 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
             db.ExecuteNonQuery(str);
         }
 
+        public DataTable TimKiemNhanVien(string keyword)
+        {
+            string sql = string.Format("Select MaNhanVien, HoTenNhanVien, NgaySinh, DiaChi, DienThoai, TenBangCap " +
+                                       "From NhanVien N, BANGCAP B " +
+                                       "Where N.MaBangCap = B.MaBangCap " +
+                                       "And LOWER(HoTenNhanVien) LIKE LOWER(N'%{0}%')", keyword);
+            return db.Execute(sql); // Trả về DataTable kết quả tìm kiếm
+        }
 
     }
 }

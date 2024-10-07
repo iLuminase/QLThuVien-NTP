@@ -34,5 +34,7 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
             sqlcmd.ExecuteNonQuery();//Lenh hien lenh Them/Xoa/Sua
             sqlConn.Close();//Dong ket noi
         }
+
+
     }
 }
