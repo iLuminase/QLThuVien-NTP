@@ -160,8 +160,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Database.cs" />
-    <Compile Include="DocGia.cs" />
+    <Compile Include="Models\Database.cs" />
+    <Compile Include="Models\DocGia.cs" />
     <Compile Include="frmBangCap.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -210,7 +210,6 @@
     <Compile Include="frmSach.Designer.cs">
       <DependentUpon>frmSach.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\DOCGIA.cs" />
     <Compile Include="Models\NhanVien.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

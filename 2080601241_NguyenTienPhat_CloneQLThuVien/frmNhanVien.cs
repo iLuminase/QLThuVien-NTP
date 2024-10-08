@@ -14,6 +14,7 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
 {
     public partial class frmNhanVien : Form
     {
+
         NhanVien nv = new NhanVien();
         public bool themmoi = false;
         SqlConnection sqlConn; //khai báo biến connection
@@ -30,6 +31,7 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
        
         DataTable layDanhSachNhanVien() //lấy danh sách nhân viên
         {
+            
             string sql = "Select * from NhanVien";
             da = new SqlDataAdapter(sql, sqlConn);
             da.Fill(ds);
@@ -37,6 +39,7 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
         }
         void LoadListview()
         {
+            
             lsvNhanVien.FullRowSelect = true; //cho phép chọn 1 dòng
             lsvNhanVien.View = View.Details; //cho phép hiển thị thông tin chi tiết dạng bảng
             DataTable dt = layDanhSachNhanVien();
@@ -68,7 +71,7 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
         private void frmNhanvien_Load(object sender, EventArgs e)
         {
             HienthiNhanvien();
-
+            
         }
         private void HienthiBangCap()
         {
@@ -172,29 +175,7 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
             else
                 MessageBox.Show("Bạn phải chọn mẩu tin cần xóa");
         }
-        private void btnLuu_Click(object sender, EventArgs e)
-        {
-
-            string ngay = String.Format("{0:MM/dd/yyyy}", dtpNgaySinh.Value);
-            //Định dạng ngày tương ứng với trong CSDL SQLserver
-            if (themmoi)
-            {
-                nv.ThemNhanVien(txtHoTen.Text, ngay, txtDiaChi.Text,
-               txtDienThoai.Text, cbxBangCap.SelectedValue.ToString());
-                MessageBox.Show("Thêm mới thành công");
-            }
-            else
-            {
-                nv.CapNhatNhanVien(lsvNhanVien.SelectedItems[0].SubItems[0].Text,
-                    txtHoTen.Text, ngay, txtDiaChi.Text, txtDienThoai.Text,
-                    cbxBangCap.SelectedValue.ToString());
-                MessageBox.Show("Cập nhật thành công");
-            }
-
-            lsvNhanVien.Items.Clear();
-            HienthiNhanvien();
-            setNull();
-        }
+        
 
         private void txtTimKiem_TextChanged(object sender, EventArgs e)
         {
@@ -218,6 +199,34 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
             }
         }
 
+        private void frmNhanVien_Load_1(object sender, EventArgs e)
+        {
 
+        }
+
+        private void SaveNV_click(object sender, EventArgs e)
+        {
+            // Lấy giá trị ngày sinh từ dtpNgaySinh dưới dạng DateTime
+            DateTime ngaySinh = dtpNgaySinh.Value;
+
+            // Kiểm tra xem đang ở trạng thái thêm mới hay cập nhật
+            if (themmoi)
+            {
+                // Gọi phương thức thêm nhân viên, truyền ngày sinh trực tiếp dưới dạng DateTime
+                nv.ThemNhanVien(txtHoTen.Text, ngaySinh, txtDiaChi.Text, txtDienThoai.Text, cbxBangCap.SelectedValue.ToString());
+                MessageBox.Show("Thêm mới thành công");
+            }
+            else
+            {
+                // Gọi phương thức cập nhật nhân viên, truyền ngày sinh trực tiếp dưới dạng DateTime
+                nv.CapNhatNhanVien(lsvNhanVien.SelectedItems[0].SubItems[0].Text, txtHoTen.Text, ngaySinh, txtDiaChi.Text, txtDienThoai.Text, cbxBangCap.SelectedValue.ToString());
+                MessageBox.Show("Cập nhật thành công");
+            }
+
+            // Làm mới ListView và các trường nhập liệu
+            lsvNhanVien.Items.Clear();
+            HienthiNhanvien();
+            setNull();
+        }
     }
 }

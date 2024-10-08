@@ -93,11 +93,12 @@
             this.dtpNgaySinh.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dtpNgaySinh.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtpNgaySinh.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpNgaySinh.Location = new System.Drawing.Point(139, 86);
             this.dtpNgaySinh.Name = "dtpNgaySinh";
-            this.dtpNgaySinh.Size = new System.Drawing.Size(225, 26);
+            this.dtpNgaySinh.Size = new System.Drawing.Size(143, 26);
             this.dtpNgaySinh.TabIndex = 1;
+            this.dtpNgaySinh.Value = new System.DateTime(2024, 10, 8, 20, 15, 0, 0);
             // 
             // label3
             // 
@@ -251,7 +252,7 @@
             this.btnLuu.TabIndex = 8;
             this.btnLuu.Text = "Lưu";
             this.btnLuu.UseVisualStyleBackColor = true;
-            this.btnLuu.Click += new System.EventHandler(this.btnLuu_Click);
+            this.btnLuu.Click += new System.EventHandler(this.SaveNV_click);
             // 
             // btnHuy
             // 
@@ -278,7 +279,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(1184, 48);
+            this.label7.Location = new System.Drawing.Point(1148, 54);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(77, 20);
             this.label7.TabIndex = 11;
@@ -286,9 +287,9 @@
             // 
             // txtTim
             // 
-            this.txtTim.Location = new System.Drawing.Point(1267, 42);
+            this.txtTim.Location = new System.Drawing.Point(1231, 51);
             this.txtTim.Name = "txtTim";
-            this.txtTim.Size = new System.Drawing.Size(137, 26);
+            this.txtTim.Size = new System.Drawing.Size(177, 26);
             this.txtTim.TabIndex = 12;
             this.txtTim.TabStop = false;
             this.txtTim.TextChanged += new System.EventHandler(this.txtTimKiem_TextChanged);
@@ -316,6 +317,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmNhanVien";
             this.Text = "Quản Lí Nhân Viên";
+            this.Load += new System.EventHandler(this.frmNhanVien_Load_1);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
