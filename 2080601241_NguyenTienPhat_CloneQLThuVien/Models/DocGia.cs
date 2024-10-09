@@ -36,15 +36,30 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
         }
 
         // Cập nhật thông tin đọc giả
-        public void CapNhatDocGia(string ten, DateTime ngaysinh, string diachi, string email, DateTime ngayLapThe, DateTime ngayHetHan)
+        public void CapNhatDocGia(int maDocGia, string hoTenDocGia, DateTime ngaySinh, string diaChi, string email, DateTime ngayLapThe, DateTime ngayHetHan)
         {
-            string query = "UPDATE DocGia SET HoTen = @HoTen, NgaySinh = @NgaySinh, DiaChi = @DiaChi, Email = @Email," +
-                " NgayLapThe = @NgayLapThe, NgayHetHan = @NgayHetHan WHERE MaDocGia = @MaDocGia";
-            db.ExecuteNonQuery(query);
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string sql = "UPDATE DocGia SET HoTenDocGia = @HoTenDocGia, NgaySinh = @NgaySinh, DiaChi = @DiaChi, Email = @Email, NgayLapThe = @NgayLapThe, NgayHetHan = @NgayHetHan WHERE MaDocGia = @MaDocGia";
+
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    // Khai báo các tham số
+                    cmd.Parameters.AddWithValue("@HoTenDocGia", hoTenDocGia);
+                    cmd.Parameters.AddWithValue("@NgaySinh", ngaySinh);
+                    cmd.Parameters.AddWithValue("@DiaChi", diaChi);
+                    cmd.Parameters.AddWithValue("@Email", email);
+                    cmd.Parameters.AddWithValue("@NgayLapThe", ngayLapThe);
+                    cmd.Parameters.AddWithValue("@NgayHetHan", ngayHetHan);
+                    cmd.Parameters.AddWithValue("@MaDocGia", maDocGia); // Không quên khai báo tham số mã độc giả
+
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
 
-
-            public void XoaDocGia(string maDocGia)
+        public void XoaDocGia(string maDocGia)
             {
                 using (SqlConnection sqlConn = new SqlConnection(connectionString))
                 {

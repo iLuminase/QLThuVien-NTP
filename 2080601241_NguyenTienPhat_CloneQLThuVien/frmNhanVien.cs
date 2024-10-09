@@ -97,7 +97,51 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
         }
 
 
+        // Kiểm tra các trường nhập liệu trước khi lưu
+        private bool KiemTraNhapLieu()
+        {
+            // Kiểm tra họ tên
+            if (string.IsNullOrWhiteSpace(txtHoTen.Text))
+            {
+                MessageBox.Show("Họ tên không được để trống.");
+                txtHoTen.Focus();
+                return false;
+            }
 
+            // Kiểm tra ngày sinh
+            if (dtpNgaySinh.Value > DateTime.Now)
+            {
+                MessageBox.Show("Ngày sinh không được lớn hơn ngày hiện tại.");
+                dtpNgaySinh.Focus();
+                return false;
+            }
+
+            // Kiểm tra địa chỉ (không bắt buộc, nhưng có thể kiểm tra nếu cần)
+            if (txtDiaChi.Text.Length > 200)
+            {
+                MessageBox.Show("Địa chỉ quá dài.");
+                txtDiaChi.Focus();
+                return false;
+            }
+
+            // Kiểm tra điện thoại (chỉ cho phép nhập số và độ dài hợp lệ)
+            if (!System.Text.RegularExpressions.Regex.IsMatch(txtDienThoai.Text, @"^\d{10,11}$"))
+            {
+                MessageBox.Show("Số điện thoại không hợp lệ. Vui lòng nhập 10 hoặc 11 chữ số.");
+                txtDienThoai.Focus();
+                return false;
+            }
+
+            // Kiểm tra bằng cấp
+            if (cbxBangCap.SelectedIndex == -1)
+            {
+                MessageBox.Show("Vui lòng chọn bằng cấp.");
+                cbxBangCap.Focus();
+                return false;
+            }
+
+            return true;
+        }
         void HienthiNhanvien()
         {
             DataTable dt = nv.LayDSNhanvien();
@@ -206,6 +250,11 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
 
         private void SaveNV_click(object sender, EventArgs e)
         {
+            // Kiểm tra dữ liệu nhập vào
+            if (!KiemTraNhapLieu())
+            {
+                return;
+            }
             // Lấy giá trị ngày sinh từ dtpNgaySinh dưới dạng DateTime
             DateTime ngaySinh = dtpNgaySinh.Value;
 

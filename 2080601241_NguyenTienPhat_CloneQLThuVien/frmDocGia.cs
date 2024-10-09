@@ -24,7 +24,7 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
             DataTable dt = dg.LayDSDocGia(); // Giả sử phương thức này trả về DataTable
             dgvDocGia.DataSource = bs; // Gán BindingSource cho DataGridView
             bs.DataSource = dt; // Gán nguồn dữ liệu cho BindingSource
-            dgvDocGia.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
         }
 
         private void setNull()
@@ -45,30 +45,70 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
             btnLuu.Enabled = !val;
             btnHuy.Enabled = !val;
         }
+        private bool KiemTraNhapLieu()
+        {
+            // Kiểm tra họ tên
+            if (string.IsNullOrWhiteSpace(txtTenDG.Text))
+            {
 
+                txtTenDG.Focus();
+                MessageBox.Show("Họ tên không được để trống");
+                return false;
+            }
+            // Kiểm tra ngày sinh
+            if (dtpNgaySinh.Value > DateTime.Now)
+            {
+                MessageBox.Show("Ngày sinh không được lớn hơn ngày hiện tại");
+                dtpNgaySinh.Focus();
+                return false;
+            }
+            if (txtDiaChi.Text.Length > 200)
+            {
+                MessageBox.Show("Địa chỉ quá dài!");
+                txtDiaChi.Focus();
+                return false;
+            }
+            if (txtEmail.Text.Length > 100)
+            {
+                MessageBox.Show("Địa chỉ Email quá dài!");
+                txtEmail.Focus();
+                return false;
+            }
+            if (dtpNgayLapThe.Value < dtpNgaySinh.Value)
+            {
+                MessageBox.Show("Ngày lập thẻ phải lớn hơn ngày sinh");
+                dtpNgayLapThe.Focus();
+                return false;
+            }
+            if (dtpNgayHetHan.Value < dtpNgayLapThe.Value)
+            {
+                MessageBox.Show("Ngày hết hạn sử dụng phải lớn hơn ngày lập thẻ");
+                dtpNgayHetHan.Focus();
+                return false;
+            }
+            return true;
+        }
         private void dgvDocGia_SelectionChanged(object sender, EventArgs e)
         {
-            if (dgvDocGia.SelectedRows.Count > 0)
+            if (dgvDocGia.CurrentRow != null && dgvDocGia.CurrentRow.Cells["MaDocGia"].Value != null)
             {
-                // Lấy dòng đã chọn
-                DataGridViewRow row = dgvDocGia.SelectedRows[0];
+                // Lấy dòng hiện tại và cập nhật các điều khiển nhập liệu
+                DataGridViewRow row = dgvDocGia.CurrentRow;
 
-                // Cập nhật các TextBox từ hàng đã chọn
                 txtTenDG.Text = row.Cells["HoTenDocGia"].Value?.ToString() ?? string.Empty;
                 dtpNgaySinh.Value = row.Cells["NgaySinh"].Value != DBNull.Value
                     ? DateTime.Parse(row.Cells["NgaySinh"].Value.ToString())
-                    : DateTime.Now; // Hoặc một giá trị mặc định hợp lý
+                    : DateTime.Now;
 
                 txtDiaChi.Text = row.Cells["DiaChi"].Value?.ToString() ?? string.Empty;
                 txtEmail.Text = row.Cells["Email"].Value?.ToString() ?? string.Empty;
-
                 dtpNgayLapThe.Value = row.Cells["NgayLapThe"].Value != DBNull.Value
                     ? DateTime.Parse(row.Cells["NgayLapThe"].Value.ToString())
-                    : DateTime.Now; // Hoặc một giá trị mặc định hợp lý
+                    : DateTime.Now;
 
                 dtpNgayHetHan.Value = row.Cells["NgayHetHan"].Value != DBNull.Value
                     ? DateTime.Parse(row.Cells["NgayHetHan"].Value.ToString())
-                    : DateTime.Now; // Hoặc một giá trị mặc định hợp lý
+                    : DateTime.Now;
             }
         }
 
@@ -76,55 +116,77 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
         {
             themmoi = true;
             setButton(false);
-            setNull(); // Đặt lại các trường nhập liệu
             txtTenDG.Focus(); // Đặt con trỏ vào trường "Tên Đọc Giả"
+
         }
+
         private void dgvDocGia_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0) // Kiểm tra rằng hàng đã chọn hợp lệ
+            // Kiểm tra chỉ số dòng hợp lệ
+            if (e.RowIndex >= 0 && dgvDocGia.Rows[e.RowIndex].Cells[0].Value != null)
             {
                 // Lấy dòng đã chọn
                 DataGridViewRow row = dgvDocGia.Rows[e.RowIndex];
 
-                // Cập nhật các TextBox từ hàng đã chọn
-                txtTenDG.Text = row.Cells["HoTenDocGia"].Value?.ToString() ?? string.Empty;
-                dtpNgaySinh.Value = row.Cells["NgaySinh"].Value != DBNull.Value
-                    ? DateTime.Parse(row.Cells["NgaySinh"].Value.ToString())
-                    : DateTime.Now; // Hoặc một giá trị mặc định hợp lý
+                // Kiểm tra giá trị của từng ô trước khi gán vào điều khiển tương ứng
+                if (row.Cells[1].Value != null)
+                    txtTenDG.Text = row.Cells[1].Value.ToString();
 
-                txtDiaChi.Text = row.Cells["DiaChi"].Value?.ToString() ?? string.Empty;
-                txtEmail.Text = row.Cells["Email"].Value?.ToString() ?? string.Empty;
+                if (row.Cells[2].Value != null && DateTime.TryParse(row.Cells[2].Value.ToString(), out DateTime ngaySinh))
+                    dtpNgaySinh.Value = ngaySinh;
 
-                dtpNgayLapThe.Value = row.Cells["NgayLapThe"].Value != DBNull.Value
-                    ? DateTime.Parse(row.Cells["NgayLapThe"].Value.ToString())
-                    : DateTime.Now; // Hoặc một giá trị mặc định hợp lý
+                if (row.Cells[3].Value != null)
+                {
+                    txtDiaChi.Text = row.Cells[3].Value.ToString();
+                }
+                if (row.Cells[4].Value != null)
+                    txtEmail.Text = row.Cells[4].Value.ToString();
 
-                dtpNgayHetHan.Value = row.Cells["NgayHetHan"].Value != DBNull.Value
-                    ? DateTime.Parse(row.Cells["NgayHetHan"].Value.ToString())
-                    : DateTime.Now; // Hoặc một giá trị mặc định hợp lý
+                if (row.Cells[5].Value != null && DateTime.TryParse(row.Cells[5].Value.ToString(), out DateTime ngayLapThe))
+                    dtpNgayLapThe.Value = ngayLapThe;
+
+                if (row.Cells[6].Value != null && DateTime.TryParse(row.Cells[6].Value.ToString(), out DateTime ngayHetHan))
+                    dtpNgayHetHan.Value = ngayHetHan;
             }
         }
         private void btnLuu_Click(object sender, EventArgs e)
         {
+            if (!KiemTraNhapLieu()) // Kiểm tra xem người dùng đã nhập liệu đầy đủ chưa
+            {
+                return;
+            }
+
+            DateTime ngaySinh = dtpNgaySinh.Value;
             DateTime ngayLapThe = dtpNgayLapThe.Value;
             DateTime ngayHetHan = dtpNgayHetHan.Value;
-            DateTime ngaySinh = dtpNgaySinh.Value;
 
             if (themmoi)
             {
+                // Thêm mới độc giả
                 dg.ThemDocGia(txtTenDG.Text, ngaySinh, txtDiaChi.Text, txtEmail.Text, ngayLapThe, ngayHetHan);
                 MessageBox.Show("Thêm mới thành công");
             }
             else
             {
-                // Giả sử mã đọc giả được lấy từ dòng đã chọn
-                string maDocGia = dgvDocGia.SelectedRows[0].Cells[0].Value.ToString();
-                dg.CapNhatDocGia(txtTenDG.Text, ngaySinh, txtDiaChi.Text, txtEmail.Text, ngayLapThe, ngayHetHan);
-                MessageBox.Show("Cập nhật thành công");
+                // Cập nhật độc giả
+                if (dgvDocGia.CurrentRow != null)
+                {
+                    // Lấy mã độc giả từ dòng hiện tại
+                    string maDocGia = dgvDocGia.CurrentRow.Cells["MaDocGia"].Value.ToString(); // Thay đổi tên cột nếu cần
+
+                    // Gọi phương thức cập nhật
+                    dg.CapNhatDocGia(int.Parse(maDocGia), txtTenDG.Text, ngaySinh, txtDiaChi.Text, txtEmail.Text, ngayLapThe, ngayHetHan);
+                    MessageBox.Show($"Cập nhật thông tin cho đọc giả {txtTenDG.Text} thành công");
+                }
+                else
+                {
+                    MessageBox.Show("Bạn phải chọn một độc giả để sửa", "Thông báo");
+                }
             }
 
-            dgvDocGia.DataSource = dg.LayDSDocGia(); // Refresh the DataGridView
-            setNull();
+            // Làm mới DataGridView
+            dgvDocGia.DataSource = dg.LayDSDocGia(); // Load lại danh sách đọc giả
+            setNull(); // Đặt lại các điều khiển nhập liệu về trạng thái ban đầu
         }
 
         private void btnXoa_Click(object sender, EventArgs e)
@@ -150,30 +212,34 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
 
         private void btnSua_Click(object sender, EventArgs e)
         {
-            if (dgvDocGia.SelectedRows.Count > 0)
+            if (!KiemTraNhapLieu())
             {
-                // Lấy thông tin từ texbox
-                string tenDocGia = txtTenDG.Text;
-                DateTime ngaySinh = dtpNgaySinh.Value;
-                string diaChi = txtDiaChi.Text;
-                string email = txtEmail.Text;
-                DateTime ngayLapThe = dtpNgayLapThe.Value;
-                DateTime ngayHetHan = dtpNgayHetHan.Value;
+                return;
+            }
 
-                // Cập nhật thông tin đọc giả
-                dg.CapNhatDocGia(tenDocGia, ngaySinh, diaChi, email, ngayLapThe, ngayHetHan);
-                MessageBox.Show("Cập nhật thành công");
+            // Kiểm tra xem có dòng nào đang được chọn không
+            if (dgvDocGia.CurrentRow != null && dgvDocGia.CurrentRow.Cells["MaDocGia"].Value != null)
+            {
+                // Lấy thông tin từ dòng hiện tại trong DataGridView
+                DataGridViewRow row = dgvDocGia.CurrentRow;
 
-                // Làm mới DataGridView
-                dgvDocGia.DataSource = dg.LayDSDocGia(); // Refresh the DataGridView
-                setNull(); // Đặt lại các trường nhập liệu
+                // Điền thông tin vào các điều khiển nhập liệu
+                txtTenDG.Text = row.Cells["HoTenDocGia"].Value.ToString();
+                dtpNgaySinh.Value = DateTime.Parse(row.Cells["NgaySinh"].Value.ToString());
+                txtDiaChi.Text = row.Cells["DiaChi"].Value.ToString();
+                txtEmail.Text = row.Cells["Email"].Value.ToString();
+                dtpNgayLapThe.Value = DateTime.Parse(row.Cells["NgayLapThe"].Value.ToString());
+                dtpNgayHetHan.Value = DateTime.Parse(row.Cells["NgayHetHan"].Value.ToString());
+
+                // Bật nút Lưu để lưu thay đổi sau khi sửa
+                btnLuu.Enabled = true;
+                btnSua.Enabled = false;
             }
             else
             {
-                MessageBox.Show("Bạn phải chọn một đọc giả để sửa");
+                MessageBox.Show("Bạn phải chọn một đọc giả để sửa", "Thông báo");
             }
         }
-
 
         private void btnThoat_Click(object sender, EventArgs e)
         {
