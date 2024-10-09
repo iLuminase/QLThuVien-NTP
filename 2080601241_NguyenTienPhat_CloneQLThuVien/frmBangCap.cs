@@ -1,4 +1,5 @@
-﻿using System;
+﻿using _2080601241_NguyenTienPhat_CloneQLThuVien.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,7 +17,6 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
         {
             InitializeComponent();
         }
-
-
+        BangCap bc = new BangCap();
     }
 }

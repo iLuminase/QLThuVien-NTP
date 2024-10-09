@@ -34,7 +34,21 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
             sqlcmd.ExecuteNonQuery();//Lenh hien lenh Them/Xoa/Sua
             sqlConn.Close();//Dong ket noi
         }
+        public void ExecuteNonQuery(string strSQL, params SqlParameter[] parameters)
+        {
+            using (SqlCommand sqlcmd = new SqlCommand(strSQL, sqlConn))
+            {
+                // Thêm các tham số vào SqlCommand nếu có
+                if (parameters != null)
+                {
+                    sqlcmd.Parameters.AddRange(parameters);
+                }
 
+                sqlConn.Open(); // Mở kết nối
+                sqlcmd.ExecuteNonQuery(); // Thực thi lệnh
+                sqlConn.Close(); // Đóng kết nối
+            }
+        }
 
     }
 }
