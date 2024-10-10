@@ -50,5 +50,37 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien.Models
             SqlParameter parameter = new SqlParameter("@MaBangCap", maBangCap);
             db.ExecuteNonQuery(sql, parameter);
         }
+
+        public bool KiemTraBangCapDuocSuDung(int maBangCap)
+        {
+            // Sử dụng chuỗi kết nối từ thuộc tính connectionString
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string query = "SELECT COUNT(*) FROM NhanVien WHERE MaBangCap = @MaBangCap";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@MaBangCap", maBangCap);
+
+                    try
+                    {
+                        // Mở kết nối
+                        connection.Open();
+
+                        // Thực thi truy vấn và lấy kết quả
+                        int count = (int)command.ExecuteScalar();
+
+                        // Trả về true nếu có nhân viên sử dụng bằng cấp này
+                        return count > 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Lỗi khi kiểm tra bằng cấp: " + ex.Message);
+                        return false;
+                    }
+                }
+            }
+        }
+
     }
 }
