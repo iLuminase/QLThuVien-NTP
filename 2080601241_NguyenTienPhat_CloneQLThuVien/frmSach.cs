@@ -28,7 +28,8 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
             dgvBook.DataSource = s.LayDsSach(); // Load danh sách sách
             CapNhatTongSoSach(); // Cập nhật tổng số sách khi form load
             dgvBook.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
+            setNull();
+           
         }
 
         private void HienThiDanhSachSach()
@@ -82,6 +83,7 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
         private void btnAdd_Click(object sender, EventArgs e)
         {
             // Đặt biến themmoi thành true để chỉ ra rằng đang ở chế độ thêm mới
+            setButton(true);
             themmoi = true;
             txtBookName.Focus();
         }
@@ -250,6 +252,21 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
                 // Lọc danh sách sách theo từ khóa
                 dgvBook.DataSource = s.TimKiemSach(keyword);
             }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            setButton(false);
+        }
+
+        private void setButton(bool v)
+        {
+            btnSave.Enabled = v;
+            btnCancel.Enabled = v;
+            btnDelete.Enabled = !v;
+            btnClose.Enabled = !v;
+            btnAdd.Enabled = !v;
+            btnSua.Enabled = !v;
         }
     }
 }

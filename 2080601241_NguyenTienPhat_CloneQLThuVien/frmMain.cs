@@ -112,9 +112,23 @@ namespace _2080601241_NguyenTienPhat_CloneQLThuVien
 
         private void tsbPhieuMuon_Click(object sender, EventArgs e)
         {
-
+            hideForm();
+            foreach (Form f in this.MdiChildren) // Đối với mỗi form con trong giao diện..
+            {
+                if (f.Name == "frmPhieuMuon")
+                {
+                    f.Activate(); // Mở giao diện
+                    f.BringToFront(); // Đẩy lên phía trên
+                    f.WindowState = FormWindowState.Maximized; // FullScreen
+                    f.Show();
+                    return;
+                }
+            }
+            frmPhieuMuon frm = new frmPhieuMuon();
+            frm.MdiParent = this; // Giúp giao diện MDI chỉ nằm trong form cha (frmMain)
+            frm.WindowState = FormWindowState.Maximized;
+            frm.Show();
         }
-
         private void tsbPhieuThu_Click(object sender, EventArgs e)
         {
             hideForm();
