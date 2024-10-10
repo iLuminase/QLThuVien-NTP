@@ -195,6 +195,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\BangCap.cs" />
     <Compile Include="Models\Database.cs" />
     <Compile Include="Models\DocGia.cs" />
     <Compile Include="frmBangCap.cs">
